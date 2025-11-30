@@ -33,15 +33,33 @@ Run a specific day's solution:
 lein run <day>
 ```
 
-Run tests:
+Run all tests:
 ```bash
 lein test
+```
+
+Run tests for a specific day:
+```bash
+lein test aoc2025.day01-test
+```
+
+Run a specific test:
+```bash
+lein test :only aoc2025.day01-test/example-helper-test
 ```
 
 Start REPL for interactive development:
 ```bash
 lein repl
 ```
+
+## Testing
+
+**Test Structure**: Test files mirror source files - `test/aoc2025/dayXX_test.clj` tests `src/aoc2025/dayXX.clj`.
+
+**What to Test**: Write unit tests for individual helper functions using hardcoded test data within the test file. Tests should not read from input files or test against the actual puzzle input.
+
+**Shared Utilities**: If you create shared utility functions used across multiple days, place them in `src/aoc2025/utils.clj` and test them in `test/aoc2025/utils_test.clj`.
 
 ## Creating a New Day
 
@@ -51,3 +69,4 @@ lein repl
 4. Add puzzle input to `resources/dayXX.txt`
 5. Implement `parse-input`, `part1`, and `part2` functions
 6. Update the `solve` function to print the correct day number
+7. Optionally create `test/aoc2025/dayXX_test.clj` for testing helper functions
