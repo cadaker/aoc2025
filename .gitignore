@@ -12,5 +12,8 @@ pom.xml.asc
 .hgignore
 .hg/
 
+# IDE
+.idea/
+
 # Advent of Code inputs (don't commit puzzle inputs)
 resources/*.txt
