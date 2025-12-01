@@ -70,3 +70,4 @@ lein repl
 5. Implement `parse-input`, `part1`, and `part2` functions
 6. Update the `solve` function to print the correct day number
 7. Optionally create `test/aoc2025/dayXX_test.clj` for testing helper functions
+- For quick solution commits, we can use short commit messages like "Day 1 part 1 solved"

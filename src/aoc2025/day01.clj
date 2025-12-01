@@ -1,5 +1,5 @@
 (ns aoc2025.day01
-  (:require [clojure.string :as str]))
+  (:require [clojure.string :as str] [clojure.math :as math]))
 
 (defn read-input []
   (slurp "resources/day01.txt"))
@@ -17,10 +17,13 @@
 
 (def DIAL-LEN 100)
 
-(defn turn-dial [start [dir amount]]
-  (mod (if (= dir :left)
-         (- start amount)
-         (+ start amount))
+(defn signed-amount [[dir amount]]
+  (if (= dir :left)
+    (- amount)
+    amount))
+
+(defn turn-dial [start turn]
+  (mod (+ start (signed-amount turn))
        DIAL-LEN))
 
 (def DIAL-START 50)
@@ -29,8 +32,23 @@
   (let [dial-sequence (reductions (partial turn-dial) DIAL-START input)]
     (count (filter {0 :true} dial-sequence))))
 
+(defn zeros-passed [start [dir amount]]
+  (if (= dir :right)
+    (math/floor-div (+ start amount) DIAL-LEN)
+    (zeros-passed (mod (- 100 start) DIAL-LEN)
+                  [:right amount])))
+
+(defn count-dial-zeros [start turn]
+  [(turn-dial start turn)
+   (zeros-passed start turn)])
+
 (defn part2 [input]
-  nil)
+  (let [steps (reductions
+                 (fn [[start _] turn]
+                   (count-dial-zeros start turn))
+                 [DIAL-START 0]
+                 input)]
+    (reduce + (map second steps))))
 
 (defn solve []
   (let [input (-> (read-input) parse-input)]
