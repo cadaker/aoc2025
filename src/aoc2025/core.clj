@@ -1,4 +1,5 @@
 (ns aoc2025.core
+  (:require [clojure.stacktrace :as st])
   (:gen-class))
 
 (defn -main
@@ -11,4 +12,5 @@
         (require day-ns)
         ((ns-resolve day-ns 'solve))
         (catch Exception e
-          (println "Error running day" day ":" (.getMessage e)))))))
+          (println "Error running day" day ":")
+          (st/print-cause-trace e))))))
