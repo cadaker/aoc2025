@@ -10,6 +10,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is an Advent of Code 2025 solution repository using Clojure and Leiningen. Each day's puzzle is solved in a separate namespace following a consistent pattern.
 
+## General style guidelines
+
+- For solution commits, we can use short commit messages like "Day 1 part 1 solved"
+
 ## Architecture
 
 **Entry Point**: `src/aoc2025/core.clj` contains the `-main` function that dynamically loads and executes daily solutions. It takes a day number as argument, constructs the namespace `aoc2025.dayXX` (zero-padded), requires it, and calls its `solve` function.
@@ -70,4 +74,3 @@ lein repl
 5. Implement `parse-input`, `part1`, and `part2` functions
 6. Update the `solve` function to print the correct day number
 7. Optionally create `test/aoc2025/dayXX_test.clj` for testing helper functions
-- For quick solution commits, we can use short commit messages like "Day 1 part 1 solved"
