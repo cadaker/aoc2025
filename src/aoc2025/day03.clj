@@ -19,17 +19,26 @@
             [(first xs) 0]
             indexed-xs)))
 
+(defn joltage-helper [n acc xs]
+  (if (zero? n)
+    acc
+    (let [[digit ix] (find-max (drop-last (dec n) xs))]
+      (recur
+        (dec n)
+        (+ (* 10 acc) digit)
+        (nthnext xs (inc ix))))))
+
 (defn joltage [xs]
-  (let [[first-digit ix] (find-max (drop-last xs))
-        [second-digit _] (find-max (nthnext xs (inc ix)))]
-    (+ (* 10 first-digit) second-digit)))
+  (joltage-helper 2 0 xs))
 
 (defn part1 [input]
   (reduce + (map joltage input)))
 
+(defn joltage-12 [xs]
+  (joltage-helper 12 0 xs))
+
 (defn part2 [input]
-  ;; TODO: Implement part 2
-  nil)
+  (reduce + (map joltage-12 input)))
 
 (defn solve []
   (let [input (-> (read-input) parse-input)]

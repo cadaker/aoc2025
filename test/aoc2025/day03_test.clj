@@ -41,3 +41,17 @@
     (is (= 98 (joltage [9 8])))
     (is (= 91 (joltage [9 1 1 1])))
     (is (= 54 (joltage [5 4 3 2 1])))))
+
+(deftest joltage-12-test
+  (testing "skip 1s at end"
+    (is (= 987654321111 (joltage-12 [9 8 7 6 5 4 3 2 1 1 1 1 1 1 1]))))
+  (testing "skip 1s in middle"
+    (is (= 811111111119 (joltage-12 [8 1 1 1 1 1 1 1 1 1 1 1 1 1 9]))))
+  (testing "skip smaller digits near start"
+    (is (= 434234234278 (joltage-12 [2 3 4 2 3 4 2 3 4 2 3 4 2 7 8]))))
+  (testing "skip 1s near front"
+    (is (= 888911112111 (joltage-12 [8 1 8 1 8 1 9 1 1 1 1 2 1 1 1]))))
+  (testing "select all digits when exactly 12"
+    (is (= 123456789012 (joltage-12 [1 2 3 4 5 6 7 8 9 0 1 2]))))
+  (testing "simple greedy selection"
+    (is (= 999999999999 (joltage-12 [9 9 9 9 9 9 9 9 9 9 9 9 1 1 1])))))
