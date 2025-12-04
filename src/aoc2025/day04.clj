@@ -25,17 +25,32 @@
 (defn accessible? [grid [row col]]
   (< (count-rolls grid row col) 4))
 
-(defn part1 [input]
-  (let [all-poses (grid/grid-positions input)
+(defn all-accessible [grid]
+  (let [all-poses (grid/grid-positions grid)
         accessible-poses (filter (fn [p]
-                                   (and (roll-at? input p)
-                                        (accessible? input p)))
+                                   (and (roll-at? grid p)
+                                        (accessible? grid p)))
                                  all-poses)]
-    (count accessible-poses)))
+    accessible-poses))
+
+(defn part1 [input]
+    (count (all-accessible input)))
+
+(defn remove-accessible [grid]
+  (let [acc-rolls (all-accessible grid)]
+    [(reduce (fn [grid [row col]]
+               (grid/grid-assoc grid row col \.))
+             grid
+             acc-rolls)
+     acc-rolls]))
 
 (defn part2 [input]
-  ;; TODO: Implement part 2 when it's revealed
-  0)
+  (loop [grid input
+         total 0]
+    (let [[new-grid removed] (remove-accessible grid)]
+      (if (empty? removed)
+        total
+        (recur new-grid (+ total (count removed)))))))
 
 (defn solve []
   (let [input (-> (read-input) parse-input)]

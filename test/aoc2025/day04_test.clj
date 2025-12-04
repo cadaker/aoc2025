@@ -89,3 +89,57 @@
 @.@.@@@.@."
           grid (parse-input input)]
       (is (= 13 (part1 grid))))))
+
+(deftest remove-accessible-test
+  (testing "grid with one accessible roll"
+    (let [g (grid/grid-from-lines ["..."
+                                     ".@."
+                                     "..."])
+          [new-grid removed] (remove-accessible g)
+          expected (grid/grid-from-lines ["..."
+                                           "..."
+                                           "..."])]
+      (is (= [[1 1]] removed))
+      (is (= expected new-grid))))
+
+  (testing "grid with multiple accessible rolls"
+    (let [g (grid/grid-from-lines ["@.@"
+                                     "..."
+                                     "@.@"])
+          [new-grid removed] (remove-accessible g)
+          expected (grid/grid-from-lines ["..."
+                                           "..."
+                                           "..."])]
+      (is (= 4 (count removed)))
+      (is (= (set removed) #{[0 0] [0 2] [2 0] [2 2]}))
+      (is (= expected new-grid))))
+
+  (testing "grid with mix of accessible and inaccessible rolls"
+    (let [g (grid/grid-from-lines [".@."
+                                     "@@@"
+                                     ".@."])
+          [new-grid removed] (remove-accessible g)
+          expected (grid/grid-from-lines ["..."
+                                           ".@."
+                                           "..."])]
+      (is (= 4 (count removed)))
+      (is (= (set removed) #{[0 1] [1 0] [1 2] [2 1]}))
+      (is (= expected new-grid))))
+
+  (testing "empty grid returns no removed rolls"
+    (let [g (grid/grid-from-lines ["..."
+                                     "..."
+                                     "..."])
+          [new-grid removed] (remove-accessible g)]
+      (is (= [] removed))
+      (is (= g new-grid))))
+
+  (testing "filled grid with empty corners - no accessible rolls"
+    (let [g (grid/grid-from-lines [".@@@."
+                                     "@@@@@"
+                                     "@@@@@"
+                                     "@@@@@"
+                                     ".@@@."])
+          [new-grid removed] (remove-accessible g)]
+      (is (= [] removed))
+      (is (= g new-grid)))))
