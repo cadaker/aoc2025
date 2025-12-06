@@ -70,7 +70,7 @@ lein repl
 1. Copy `src/aoc2025/day01.clj` to `src/aoc2025/dayXX.clj` (zero-padded number)
 2. Update the namespace declaration to match the file
 3. Update the `read-input` function to read from the correct resource file
-4. Add puzzle input to `resources/dayXX.txt`
+4. The input file is `resources/dayXX.txt`. The user will copy this file for each day.
 5. Implement `parse-input`, `part1`, and `part2` functions
 6. Update the `solve` function to print the correct day number
 7. Optionally create `test/aoc2025/dayXX_test.clj` for testing helper functions
