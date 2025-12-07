@@ -42,5 +42,8 @@
            (propagate-beams #{3 5} #{3 5})))))
 
 (deftest example-test
-  (testing "Example from problem description"
-    (is (= 21 (part1 (parse-input example-input))))))
+  (testing "Part 1: Example from problem description"
+    (is (= 21 (part1 (parse-input example-input)))))
+
+  (testing "Part 2: Quantum timelines for example"
+    (is (= 40 (part2 (parse-input example-input))))))
