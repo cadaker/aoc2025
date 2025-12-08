@@ -63,12 +63,12 @@
     [(uf/join conns'' x y) (not= gx gy)]))
 
 (defn connecting-wires [conns dists]
-  (reduce
-   (fn [[conns chosen] [dist2 x y]]
-     (let [[conns' was-chosen] (try-join conns x y)]
-       [conns' (if was-chosen (conj chosen [x y]) chosen)]))
-   [conns []]
-   dists))
+  (lazy-seq
+    (when-let [[[dist2 x y] & rest-dists] (seq dists)]
+      (let [[conns' was-chosen] (try-join conns x y)]
+        (if was-chosen
+          (cons [x y] (connecting-wires conns' rest-dists))
+          (connecting-wires conns' rest-dists))))))
 
 (defn get-connecting-wires [input]
   (let [input-count (count input)
@@ -76,7 +76,7 @@
         indexes (map first (map-indexed vector input))]
     (take
      (dec input-count)
-     (second (connecting-wires (uf/make-union-find indexes) dists)))))
+     (connecting-wires (uf/make-union-find indexes) dists))))
 
 (defn part2 [input]
   (let [wires (get-connecting-wires input)
