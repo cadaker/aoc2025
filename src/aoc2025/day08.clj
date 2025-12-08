@@ -57,9 +57,32 @@
   (let [groups (connected-groups input 1000)]
     (reduce * (take 3 groups))))
 
+(defn try-join [conns x y]
+  (let [[conns' gx] (uf/lookup conns x)
+        [conns'' gy] (uf/lookup conns y)]
+    [(uf/join conns'' x y) (not= gx gy)]))
+
+(defn connecting-wires [conns dists]
+  (reduce
+   (fn [[conns chosen] [dist2 x y]]
+     (let [[conns' was-chosen] (try-join conns x y)]
+       [conns' (if was-chosen (conj chosen [x y]) chosen)]))
+   [conns []]
+   dists))
+
+(defn get-connecting-wires [input]
+  (let [input-count (count input)
+        dists (all-distances input)
+        indexes (map first (map-indexed vector input))]
+    (take
+     (dec input-count)
+     (second (connecting-wires (uf/make-union-find indexes) dists)))))
+
 (defn part2 [input]
-  ;; Part 2 solution (not yet revealed)
-  nil)
+  (let [wires (get-connecting-wires input)
+        [index1 index2] (last wires)]
+    (* (first (nth input index1))
+       (first (nth input index2)))))
 
 (defn solve []
   (let [input (-> (read-input) parse-input)]
