@@ -7,13 +7,15 @@
     (let [input "[.##.] (3) (1,3) (2) (2,3) (0,2) (0,1) {3,5,4,7}"
           result (parse-machine input)]
       (is (= [\. \# \# \.] (:indicator result)))
-      (is (= [[3] [1 3] [2] [2 3] [0 2] [0 1]] (:buttons result)))))
+      (is (= [[3] [1 3] [2] [2 3] [0 2] [0 1]] (:buttons result)))
+      (is (= [3 5 4 7] (:joltage result)))))
 
   (testing "Parses machine with longer indicator"
     (let [input "[...#.] (0,2,3,4) (2,3) (0,4) (0,1,2) (1,2,3,4) {7,5,12,7,2}"
           result (parse-machine input)]
       (is (= [\. \. \. \# \.] (:indicator result)))
-      (is (= [[0 2 3 4] [2 3] [0 4] [0 1 2] [1 2 3 4]] (:buttons result))))))
+      (is (= [[0 2 3 4] [2 3] [0 4] [0 1 2] [1 2 3 4]] (:buttons result)))
+      (is (= [7 5 12 7 2] (:joltage result))))))
 
 (deftest indicator->bitfield-test
   (testing "Converts indicator to bitfield (position i → bit i)"
@@ -53,6 +55,17 @@
   (testing "Machine 3: minimum 2 presses"
     (let [machine (parse-machine "[.###.#] (0,1,2,3,4) (0,3,4) (0,1,2,4,5) (1,2) {10,11,11,5,10,5}")]
       (is (= 2 (min-presses machine))))))
+
+(deftest build-augmented-matrix-test
+  (testing "Builds augmented matrix from machine data"
+    (let [machine {:buttons [[3] [1 3] [2] [2 3] [0 2] [0 1]]
+                   :joltage [3 5 4 7]}
+          matrix (build-augmented-matrix machine)]
+      (is (= [[0 0 0 0 1 1 3]   ; counter 0: buttons 4,5
+              [0 1 0 0 0 1 5]   ; counter 1: buttons 1,5
+              [0 0 1 1 1 0 4]   ; counter 2: buttons 2,3,4
+              [1 1 0 1 0 0 7]]  ; counter 3: buttons 0,1,3
+             matrix)))))
 
 (deftest part1-test
   (testing "Solves example from problem description"
