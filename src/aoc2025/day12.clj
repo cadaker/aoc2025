@@ -50,12 +50,7 @@
     (assert (not (contains? (set classifications) :maybe)))
     (count (filter #{:yes} classifications))))
 
-(defn part2 [input]
-  ;; TODO: Implement part 2 when it becomes available
-  0)
-
 (defn solve []
   (let [input (-> (read-input) parse-input)]
     (println "Day 12")
-    (println "Part 1:" (part1 input))
-    (println "Part 2:" (part2 input))))
+    (println "Part 1:" (part1 input))))
