@@ -22,17 +22,23 @@
       paths
       (let [top (peek stack)
             children (graph top)]
-        (if (every? paths children)
-          (recur (pop stack) (assoc paths top (reduce + 0 (map paths children))))
-          (recur (apply conj stack children) paths))))))
+        (cond
+          (paths top) (recur (pop stack) paths)
+          (every? paths children) (recur (pop stack) (assoc paths top (reduce + 0 (map paths children))))
+          :else (recur (apply conj stack children) paths))))))
 
 (defn part1 [input]
   ((count-paths input START END) START))
 
 (defn part2 [input]
-  ;; TODO: Implement part 2
-  0)
-
+  (let [svr->fft (count-paths input "svr" "fft")
+        fft->dac (count-paths input "fft" "dac")
+        dac->out (count-paths input "dac" "out")
+        svr->dac (count-paths input "svr" "dac")
+        dac->fft (count-paths input "dac" "fft")
+        fft->out (count-paths input "fft" "out")]
+    (+ (* (svr->fft "svr") (fft->dac "fft") (dac->out "dac"))
+       (* (svr->dac "svr") (dac->fft "dac") (fft->out "fft")))))
 (defn solve []
   (let [input (-> (read-input) parse-input)]
     (println "Day 11")

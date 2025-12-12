@@ -18,3 +18,27 @@ fff: ggg"
               "eee" #{"out"}
               "fff" #{"ggg"}}
              result)))))
+
+(def part2-example
+  "svr: aaa bbb
+aaa: fft
+fft: ccc
+bbb: tty
+tty: ccc
+ccc: ddd eee
+ddd: hub
+hub: fff
+eee: dac
+dac: fff
+fff: ggg hhh
+ggg: out
+hhh: out")
+
+(deftest part2-test
+  (testing "Counts total paths from svr to out"
+    (let [graph (parse-input part2-example)]
+      (is (= 8 ((count-paths graph "svr" "out") "svr")))))
+
+  (testing "Counts paths visiting both dac and fft"
+    (let [graph (parse-input part2-example)]
+      (is (= 2 (part2 graph))))))
